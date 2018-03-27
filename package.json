@@ -1,0 +1,42 @@
+{
+  "scripts": {
+    "dev": "nodemon server/index.ts",
+    "build": "next build && tsc --project tsconfig.server.json",
+    "start": "NODE_ENV=production node production-server/index.js"
+  },
+  "dependencies": {
+    "@types/koa": "^2.0.44",
+    "@types/koa-bodyparser": "^4.2.0",
+    "@types/koa-json": "^2.0.18",
+    "@types/koa-passport": "^4.0.1",
+    "@types/koa-router": "^7.0.27",
+    "@types/koa-session": "^5.7.1",
+    "@types/node": "^9.6.0",
+    "@types/passport-local": "^1.0.32",
+    "@types/rethinkdb": "^2.3.9",
+    "glamor": "^2.20.40",
+    "glamorous": "^4.12.1",
+    "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-json": "^2.0.2",
+    "koa-passport": "^4.0.1",
+    "koa-router": "^7.4.0",
+    "koa-session": "^5.8.1",
+    "next": "latest",
+    "passport-local": "^1.0.0",
+    "ramda": "^0.25.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "rethinkdb": "^2.3.3",
+    "simple-react-form": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/next": "^2.4.8",
+    "@types/ramda": "types/npm-ramda#dist",
+    "@types/react": "^16.0.36",
+    "@zeit/next-typescript": "^0.0.8",
+    "nodemon": "^1.12.1",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.7.1"
+  }
+}
