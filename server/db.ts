@@ -12,6 +12,11 @@ const dbUp = async (command: Sequence | Operation<WriteResult | Cursor | null>) 
   }
 }
 
+export const getSymbolsState  = () => dbUp(
+  r.table('symbolsState')
+    .filter({ '4h': true })
+    .orderBy(r.row('timestamp')))
+
 export const getPositions = (account: string) => dbUp(
   r.table('positions')
     .getAll(account, { index: 'account' })
@@ -20,6 +25,11 @@ export const getPositions = (account: string) => dbUp(
 export const getAccount = (account: string) => dbUp(
   r.table('accounts')
     .get(account))
+
+export const getProfile = (account: string) => dbUp(
+  r.table('accounts')
+    .get(account)
+    .pluck([ 'name', 'preferences' ]))
 
 export const createAccount = (data: {}) => dbUp(
   r.table('accounts')

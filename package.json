@@ -5,6 +5,8 @@
     "start": "NODE_ENV=production node production-server/index.js"
   },
   "dependencies": {
+    "@types/cookie": "^0.3.1",
+    "@types/isomorphic-fetch": "^0.0.34",
     "@types/koa": "^2.0.44",
     "@types/koa-bodyparser": "^4.2.0",
     "@types/koa-json": "^2.0.18",
@@ -14,8 +16,10 @@
     "@types/node": "^9.6.0",
     "@types/passport-local": "^1.0.32",
     "@types/rethinkdb": "^2.3.9",
+    "cookie": "^0.3.1",
     "glamor": "^2.20.40",
     "glamorous": "^4.12.1",
+    "isomorphic-fetch": "^2.2.1",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-json": "^2.0.2",

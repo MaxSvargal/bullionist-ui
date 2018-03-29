@@ -1,23 +1,34 @@
 import Router from 'koa-router'
+import * as fetch from 'isomorphic-fetch'
 import { ifElse, isEmpty, always, head, prop } from 'ramda'
-import { getPositions, getInvite, createAccount, updateInvite, createInvite } from './db'
 import { saltHashPassword, genRandomString } from './hash'
+import { getPositions, getInvite, createAccount, updateInvite, createInvite, getSymbolsState, getProfile } from './db';
+
+const checkAuth = (ctx: Router.IRouterContext) =>
+  ctx.isAuthenticated() ? ctx.state.user.name : (ctx.status = 401)
 
 export default (router: Router) => {
-  router.get('/api/test', async ctx => {
-    const data = await getPositions('maxsvargal')
-    const invite = await getInvite('2df1068f024432a3899c863eb3ecb665')
-    console.log(data[0])
-    console.log(invite[0])
-    ctx.body = data
+
+  router.get('/api/profile', async ctx => {
+    const name = checkAuth(ctx)
+    name && (ctx.body = await getProfile(name))
   })
 
-  router.get('/', async ctx => {
-    if (ctx.isAuthenticated()) {
-      ctx.body = { status: ctx.state.user }
-    } else {
-      ctx.body = { status: false }
-    }
+  router.get('/api/positions', async ctx => {
+    const name = checkAuth(ctx)
+    name && (ctx.body = await getPositions(name))
+  })
+
+  router.get('/api/symbolsState', async ctx => {
+    const name = checkAuth(ctx)
+    name && (ctx.body = await getSymbolsState())
+  })
+
+  router.get('/api/candles/:symbol/:interval/:limit', async ctx => {
+    if (ctx.isUnauthenticated()) return (ctx.status = 401)
+    const { symbol, interval, limit } = ctx.params
+    const res = await fetch(`https://api.binance.com/api/v1/klines?interval=${interval}&limit=${limit}&symbol=${symbol}`)
+    ctx.body = await res.json()
   })
 
   router.post('/signup', async ctx => {
