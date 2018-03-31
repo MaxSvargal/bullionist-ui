@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { SyntheticEvent } from 'react'
 import glamorous, { Div, Button } from 'glamorous'
 
 const Row = glamorous.div({
@@ -17,10 +17,13 @@ const Input = glamorous.input({
   fontSize: '1.1rem'
 })
 
+const toLower = (input: SyntheticEvent<HTMLInputElement>) =>
+  input.target.value = input.target.value.toLowerCase()
+
 export default ({ url: { query: { status } } }: any) =>
   <Div
     display='grid'
-    grid='1fr auto 1fr / 1fr 400px 1fr'
+    grid='1fr auto 1fr / 1fr 4fr 1fr'
     height='100vh'
     background='linear-gradient(#FC5C7D, #6A82FB)'
     color='#546e7a' >
@@ -41,7 +44,7 @@ export default ({ url: { query: { status } } }: any) =>
         <Div display='flex' flexFlow='column nowrap'>
           <Row>
             <Label htmlFor='username'>Name</Label>
-            <Input type='text' name='username' required />
+            <Input type='text' name='username' required onKeyUp={ toLower } />
           </Row>
           <Row>
             <Label htmlFor='password'>Password</Label>

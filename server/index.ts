@@ -26,6 +26,7 @@ app.prepare().then(() => {
   }))
 
   router.get('*', async ctx => {
+    ctx.res.isAuthenticated = ctx.isAuthenticated()
     await handle(ctx.req, ctx.res)
     ctx.respond = false
   })

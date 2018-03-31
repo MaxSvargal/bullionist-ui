@@ -3,6 +3,7 @@ import { Form, Field } from 'simple-react-form'
 import glamorous, { Div, Button } from 'glamorous'
 import { Container, MenuContainer, Main } from './layouts'
 import { get, put } from './services/fetch'
+import requireAuth from './utils/requireAuth'
 
 import InputText from './components/inputText'
 import RangeInput from './components/rangeInput'
@@ -47,7 +48,8 @@ interface Props {
 
 export default class extends Component<Props> {
 
-  static async getInitialProps ({ req }: any) {
+  static async getInitialProps ({ req, res }: any) {
+    await requireAuth(res, '/signin')
     const profile = await get('/api/profile', req)
     return { profile }
   }
@@ -97,7 +99,7 @@ export default class extends Component<Props> {
               </Row>
               <Field
                 type={ RangeInput }
-                fieldName='preferences.chunksNum'
+                fieldName='preferences.chunksNumber'
                 label='Chunks number'
                 value={ profile.preferences.chunksNumber } />
 

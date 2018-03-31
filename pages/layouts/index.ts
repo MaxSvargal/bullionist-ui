@@ -20,7 +20,10 @@ export const MenuContainer = glamorous.div({
   gridArea: 'sidebar',
   '@media(max-width: 600px)': {
     gridArea: 'footer',
-    overflowY: 'scroll'
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    width: '100vw'
   }
 })
 

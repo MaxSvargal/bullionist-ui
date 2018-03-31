@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import { get } from './services/fetch'
+import requireAuth from './utils/requireAuth'
 
 import Balance from './components/balance'
 import Menu from './components/menu'
@@ -11,7 +12,8 @@ export default class extends Component {
   state = { loaded: false }
   componentDidMount() { this.setState({ loaded: true }) }
 
-  static async getInitialProps ({ req, query }) {
+  static async getInitialProps ({ req, res, query }) {
+    await requireAuth(res, '/signin')
     const [ profile, positions, symbolsState ] = await Promise.all([
       get('/api/profile', req),
       get('/api/positions', req),
