@@ -20,7 +20,7 @@ const Input = glamorous.input({
 const toLower = (input: SyntheticEvent<HTMLInputElement>) =>
   input.target.value = input.target.value.toLowerCase()
 
-export default () =>
+export default ({ url: { query } }) =>
   <Div
     display='grid'
     grid='1fr auto 1fr / 1fr 6fr 1fr'
@@ -47,7 +47,7 @@ export default () =>
           </Row>
           <Row>
             <Label htmlFor='inviteCode'>Invite Code</Label>
-            <Input type='text' name='inviteCode' required />
+            <Input type='text' name='inviteCode' defaultValue={ query.invite } required />
           </Row>
           <Row>
             <Button
