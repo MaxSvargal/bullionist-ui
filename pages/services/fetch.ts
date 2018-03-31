@@ -1,18 +1,22 @@
 import fetch from 'isomorphic-fetch'
+import { merge, pick, o } from 'ramda'
 
-const host = (req: { headers: { host: string } }) => process.browser ? location.host : req.headers.host
+type Req = { headers: { host: string } }
+
 const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+const getHost = ({ headers }: Req) => process.browser ? location.host : headers.host
+const makeHeaders = o(merge({ credentials: 'include' } as any), pick([ 'headers' ]) as (a: Req) => Req)
 
-export const get = (req: { headers: { host: string } }, path: string): Promise<Response> => {
-  console.log(`${protocol}://${host(req)}${path}`, req.headers)
-  return fetch(`${protocol}://${host(req)}${path}`, { headers: req.headers })
+type Get = (path: string, req?: Req) => Promise<Response>
+export const get: Get = (path, req = { headers: { host: 'localhost:3000' } }) =>
+  fetch(`${protocol}://${getHost(req)}${path}`, makeHeaders(req))
     .then(res => res.json())
-    .catch(err => console.error(err))
-}
+    .catch(err => console.error(err) || err)
 
 export const put = (path: string, data: {}): Promise<Response> =>
   fetch(path, {
     method: 'PUT',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })

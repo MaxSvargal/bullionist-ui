@@ -1,13 +1,26 @@
 import Router from 'koa-router'
 import * as fetch from 'isomorphic-fetch'
-import { ifElse, isEmpty, always, head, prop } from 'ramda'
+import { ifElse, isEmpty, always, head, prop, o, all, not, isNil, props, and, path } from 'ramda'
 import { saltHashPassword, genRandomString } from './hash'
-import { getPositions, getInvite, createAccount, updateInvite, createInvite, getSymbolsState, getProfile } from './db';
+import { encrypt } from './crypt'
+import { getPositions, getInvite, createAccount, updateInvite, createInvite, getSymbolsState, getProfile, updateSettings } from './db'
 
 const checkAuth = (ctx: Router.IRouterContext) =>
   ctx.isAuthenticated() ? ctx.state.user.name : (ctx.status = 401)
 
+const checkSettingsProps = o(all(o(not, isNil)), o(props([ 'key', 'secret' ]) as any, prop('binance') as any))
+const bodyPath = path([ 'request', 'body' ])
+const binancePath = o(prop('binance'), bodyPath)
+const preferencesPath = o(prop('preferences'), bodyPath)
+
 export default (router: Router) => {
+
+  router.put('/api/settings', async ctx => {
+    const name = checkAuth(ctx)
+    if (!name) return (ctx.body = { status: false, error: 'Denied' })    
+    await updateSettings({ account: name, data: ctx.request.body })
+    ctx.body = { status: true }
+  })
 
   router.get('/api/profile', async ctx => {
     const name = checkAuth(ctx)
@@ -41,12 +54,12 @@ export default (router: Router) => {
 
       if (status.inserted === 1) {
         await updateInvite({ id: invite.id, data: { active: false, of: name } })
-        ctx.redirect('/dashboard')
+        ctx.redirect('/settings')
       } else {
-        ctx.redirect('/dashboard?status=failed')
+        ctx.redirect('/signup?status=failed')
       }
     } else {
-      ctx.redirect('/dashboard?status=inviteFailed')
+      ctx.redirect('/signup?status=inviteFailed')
     }
   })
 

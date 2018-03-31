@@ -16,6 +16,7 @@
     "@types/node": "^9.6.0",
     "@types/passport-local": "^1.0.32",
     "@types/rethinkdb": "^2.3.9",
+    "aes256": "^1.0.3",
     "cookie": "^0.3.1",
     "glamor": "^2.20.40",
     "glamorous": "^4.12.1",
@@ -26,11 +27,13 @@
     "koa-passport": "^4.0.1",
     "koa-router": "^7.4.0",
     "koa-session": "^5.8.1",
-    "next": "latest",
+    "next": "^5.1.0",
     "passport-local": "^1.0.0",
     "ramda": "^0.25.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-google-charts": "^1.5.7",
+    "react-icons-kit": "^1.0.7",
     "rethinkdb": "^2.3.3",
     "simple-react-form": "^2.0.1"
   },
@@ -38,9 +41,9 @@
     "@types/next": "^2.4.8",
     "@types/ramda": "types/npm-ramda#dist",
     "@types/react": "^16.0.36",
-    "@zeit/next-typescript": "^0.0.8",
+    "@zeit/next-typescript": "0.0.11",
     "nodemon": "^1.12.1",
-    "ts-node": "^4.1.0",
+    "ts-node": "5.0.1",
     "typescript": "^2.7.1"
   }
 }

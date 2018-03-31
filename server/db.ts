@@ -29,7 +29,7 @@ export const getAccount = (account: string) => dbUp(
 export const getProfile = (account: string) => dbUp(
   r.table('accounts')
     .get(account)
-    .pluck([ 'name', 'preferences' ]))
+    .pluck([ 'name', 'preferences', 'enabled' ]))
 
 export const createAccount = (data: {}) => dbUp(
   r.table('accounts')
@@ -48,5 +48,9 @@ export const getInvite = (code: string) => dbUp(
 export const updateInvite = ({ id, data }: { id: string, data: {} }) => dbUp(
   r.table('invites')
     .get(id)
-    .update(data)
-)
+    .update(data))
+
+export const updateSettings = ({ account, data }: { account: string, data: {} }) => dbUp(
+  r.table('accounts')
+    .get(account)
+    .update(data))

@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import glamorous from 'glamorous'
 
 const Row = glamorous.div({
@@ -14,7 +14,10 @@ const Label = glamorous.label({
 
 const Input = glamorous.input({
   padding: '.8rem',
-  fontSize: '1.1rem'
+  fontSize: '1.1rem',
+  '::placeholder': {
+    color: '#cfd8dc'
+  }
 })
 
 export default class extends Component {
@@ -22,14 +25,16 @@ export default class extends Component {
   onChange = event => this.props.onChange(event.target.value)
 
   render () {
-    const { label, value, onChange, errorMessage } = this.props
+    const { label, value, onChange, errorMessage, passProps } = this.props
+
     return (
       <Row>
         <Label htmlFor='key'>{ label }</Label>
         <Input
           type='text'
           defaultValue={value}
-          onChange={this.onChange} />
+          onChange={this.onChange}
+          placeholder={passProps.placeholder} />
         <div>{ errorMessage }</div>
       </Row>
     )
