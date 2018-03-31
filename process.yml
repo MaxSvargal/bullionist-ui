@@ -1,0 +1,7 @@
+apps:
+  - name    : 'Web UI'
+    script  : 'production-server/index.js'
+    max_memory_restart: '120M'
+    env     :
+      NODE_ENV: 'production'
+      DEBUG   : 'app:log,app:error'
