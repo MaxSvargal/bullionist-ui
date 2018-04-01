@@ -2,22 +2,25 @@ import React, { Component } from 'react'
 import glamorous, { Div } from 'glamorous'
 import {
   propEq, cond, T, always, equals, sortBy, props, o, join, reverse, compose,
-  converge, pair, nth, match, concat
+  converge, pair, nth, match, concat, allPass
 } from 'ramda'
 
 const symbolBaseURI = 'https://www.binance.com/tradeDetail.html?symbol='
 const takePairFromSymbol = compose(converge(pair, [ nth(1), nth(2) ]), match(/(.+)(...)/))
 const makeExchangeSymbolURI = compose(concat(symbolBaseURI), join('_'), takePairFromSymbol)
 
+const readyToBuy = allPass([ propEq('4h', true), propEq('1h', true), propEq('15m', true) ])
+const startdGrow = allPass([ propEq('4h', true), propEq('1h', true), propEq('15m', false) ])
+
 const getSymbolStateType = cond([
-  [ propEq('15m', true), always('enabled') ],
-  [ propEq('1h', true), always('prepared') ],
+  [ readyToBuy, always('enabled') ],
+  [ startdGrow, always('prepared') ],
   [ T, always('growing') ]
 ])
 
 const getSymbolStateTitle = cond([
-  [ propEq('15m', true), always('is ready to buy') ],
-  [ propEq('1h', true), always('is started grow') ],
+  [ readyToBuy, always('is ready to buy') ],
+  [ startdGrow, always('is started grow') ],
   [ T, always('is grow globally') ]
 ])
 
