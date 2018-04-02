@@ -50,7 +50,16 @@ export default (router: Router) => {
 
     if (prop('active', invite)) {
       const { salt, hash } = saltHashPassword(password)
-      const status = await createAccount({ email, name, salt, password: hash, invite: invite.id })
+      const status = await createAccount({
+        email,
+        name,
+        salt,
+        password: hash,
+        invite: invite.id,
+        preferences: { chunksNumber: 1 },
+        binance: { key: null, secret: null },
+        enabled: false
+      })
 
       if (status.inserted === 1) {
         await updateInvite({ id: invite.id, data: { active: false, of: name } })
