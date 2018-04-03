@@ -18,7 +18,16 @@ export default (router: Router) => {
   router.put('/api/settings', async ctx => {
     const name = checkAuth(ctx)
     if (!name) return (ctx.body = { status: false, error: 'Denied' })    
-    await updateSettings({ account: name, data: ctx.request.body })
+    await updateSettings({
+      account: name,
+      data: {
+        ...bodyPath(ctx),
+        binance: {
+          key: o(encrypt, o(prop('key'), binancePath), ctx),
+          secret: o(encrypt, o(prop('secret'), binancePath), ctx)
+        }
+      }
+    })
     ctx.body = { status: true }
   })
 
