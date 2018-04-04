@@ -1,6 +1,6 @@
 import Router from 'koa-router'
 import * as fetch from 'isomorphic-fetch'
-import { both, ifElse, isEmpty, always, head, prop, o, all, not, isNil, props, path } from 'ramda'
+import { converge, merge, objOf, both, ifElse, isEmpty, always, head, prop, o, all, not, isNil, props, path } from 'ramda'
 import { saltHashPassword, genRandomString } from './hash'
 import { encrypt } from './crypt'
 import { getPositions, getInvite, createAccount, updateInvite, createInvite, getSymbolsState, getProfile, updateSettings } from './db'
@@ -8,12 +8,18 @@ import { getPositions, getInvite, createAccount, updateInvite, createInvite, get
 const checkAuth = (ctx: Router.IRouterContext) =>
   ctx.isAuthenticated() ? ctx.state.user.name : (ctx.status = 401)
 
-const checkSettingsProps = o(all(o(not, isNil)), o(props([ 'key', 'secret' ]) as any, prop('binance') as any))
 const bodyPath = path([ 'request', 'body' ])
-const preferencesPath = o(prop('preferences'), bodyPath)
 const binancePath = o(prop('binance'), bodyPath)
 const binanceKeyPath = o(prop('key'), binancePath)
 const binanceSecretPath = o(prop('secret'), binancePath)
+const cryptKeysPairs = ifElse(
+  both(binanceKeyPath, binanceSecretPath),
+  converge(merge, [
+    o(objOf('key'), o(encrypt, binanceKeyPath)),
+    o(objOf('secret'), o(encrypt, binanceSecretPath))
+  ]),
+  always({})
+)
 
 export default (router: Router) => {
 
@@ -22,13 +28,7 @@ export default (router: Router) => {
     if (!name) return (ctx.body = { status: false, error: 'Denied' })    
     await updateSettings({
       account: name,
-      data: {
-        ...bodyPath(ctx),
-        binance: both(binanceKeyPath, binanceSecretPath)(ctx) ? {
-          key: o(encrypt, binanceKeyPath, ctx),
-          secret: o(encrypt, binanceSecretPath, ctx)
-        } : {}
-      }
+      data: { ...bodyPath(ctx), binance: cryptKeysPairs(ctx) }
     })
     ctx.body = { status: true }
   })
