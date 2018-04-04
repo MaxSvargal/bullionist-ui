@@ -5,6 +5,7 @@ import * as session from 'koa-session'
 import * as passport from 'koa-passport'
 import * as bodyParser from 'koa-bodyparser'
 import * as json from 'koa-json'
+import * as serve from 'koa-static'
 
 import applyRoutes from './routes'
 import { serialize, deserialize, strategy } from './auth'
@@ -26,6 +27,7 @@ app.prepare().then(() => {
   }))
 
   router.get('*', async ctx => {
+    // TODO: double checking with API requests
     ctx.res.isAuthenticated = ctx.isAuthenticated()
     await handle(ctx.req, ctx.res)
     ctx.respond = false
@@ -47,6 +49,7 @@ app.prepare().then(() => {
   server.use(passport.initialize())
   server.use(passport.session())
   server.use(json())
+  server.use(serve('public'))
 
   server.use(router.routes())
   server.listen(port, () =>

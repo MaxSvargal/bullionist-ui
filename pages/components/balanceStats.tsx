@@ -9,6 +9,10 @@ const profitPerc = o(multiply(100), apply(divide))
 const getChunkAmount = converge(divide, [ sumOfAmounts, length ])
 
 export default class extends Component {
+  componentDidMount() {
+    document.title = `+${parseInt(getBalance(this.props.positions) * 1e8)} satoshi`
+  }
+
   render () {
     const { positions, chunksNumber, openedNowLen } = this.props
     const balance = getBalance(positions)

@@ -31,6 +31,7 @@ export default class MyDocument extends Document {
       <html>
         <Head>
           <title>Bullionist</title>
+          <link rel='icon' type='image/png' href='/favicon.png' />
           <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, minimal-ui' />
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>
