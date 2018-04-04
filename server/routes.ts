@@ -1,6 +1,6 @@
 import Router from 'koa-router'
 import * as fetch from 'isomorphic-fetch'
-import { ifElse, isEmpty, always, head, prop, o, all, not, isNil, props, and, path } from 'ramda'
+import { both, ifElse, isEmpty, always, head, prop, o, all, not, isNil, props, path } from 'ramda'
 import { saltHashPassword, genRandomString } from './hash'
 import { encrypt } from './crypt'
 import { getPositions, getInvite, createAccount, updateInvite, createInvite, getSymbolsState, getProfile, updateSettings } from './db'
@@ -10,8 +10,10 @@ const checkAuth = (ctx: Router.IRouterContext) =>
 
 const checkSettingsProps = o(all(o(not, isNil)), o(props([ 'key', 'secret' ]) as any, prop('binance') as any))
 const bodyPath = path([ 'request', 'body' ])
-const binancePath = o(prop('binance'), bodyPath)
 const preferencesPath = o(prop('preferences'), bodyPath)
+const binancePath = o(prop('binance'), bodyPath)
+const binanceKeyPath = o(prop('key'), binancePath)
+const binanceSecretPath = o(prop('secret'), binancePath)
 
 export default (router: Router) => {
 
@@ -22,10 +24,10 @@ export default (router: Router) => {
       account: name,
       data: {
         ...bodyPath(ctx),
-        binance: {
-          key: o(encrypt, o(prop('key'), binancePath), ctx),
-          secret: o(encrypt, o(prop('secret'), binancePath), ctx)
-        }
+        binance: both(binanceKeyPath, binanceSecretPath)(ctx) ? {
+          key: o(encrypt, binanceKeyPath, ctx),
+          secret: o(encrypt, binanceSecretPath, ctx)
+        } : {}
       }
     })
     ctx.body = { status: true }
