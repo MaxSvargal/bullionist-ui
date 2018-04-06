@@ -20,7 +20,7 @@ const getSymbolStateType = cond([
 
 const getSymbolStateTitle = cond([
   [ readyToBuy, always('is ready to buy') ],
-  [ startdGrow, always('is started grow') ],
+  [ startdGrow, always('is grow now') ],
   [ T, always('is grow globally') ]
 ])
 

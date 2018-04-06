@@ -20,10 +20,15 @@ export const put = (path: string, data: {}): Promise<Response> =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
+    .then(res => res.json())
+    .catch(err => console.error(err) || err)
 
 export const post = (path: string, data: {}): Promise<Response> =>
   fetch(path, {
     method: 'POST',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
+    .then(res => res.json())
+    .catch(err => console.error(err) || err)

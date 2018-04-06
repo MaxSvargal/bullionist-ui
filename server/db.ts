@@ -17,6 +17,11 @@ export const getSymbolsState  = () => dbUp(
     .filter({ '4h': true })
     .orderBy(r.row('timestamp')))
 
+export const getPosition = (id: string) => dbUp(
+  r.table('positions')
+    .get(id)
+)
+
 export const getPositions = (account: string) => dbUp(
   r.table('positions')
     .getAll(account, { index: 'account' })

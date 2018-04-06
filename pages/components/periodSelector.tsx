@@ -20,15 +20,17 @@ export default class extends Component {
     const MenuItem = glamorous.button({
       cursor: 'pointer',
       color: '#fff',
-      background: '#ef5350',
+      background: '#0288d1',
       border: 0,
+      borderBottom: '2px solid #01579b',
       textAlign: 'center',
       display: 'block',
       textDecoration: 'none',
       marginRight: '.25rem',
       fontSize: '1rem',
       ':hover': {
-        color: '#ffebee'
+        background: '#03a9f4',
+        color: '#e1f5fe'
       }
     })
 

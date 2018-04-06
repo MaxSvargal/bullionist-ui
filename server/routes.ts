@@ -3,7 +3,11 @@ import * as fetch from 'isomorphic-fetch'
 import { converge, merge, objOf, both, ifElse, isEmpty, always, head, prop, o, all, not, isNil, props, path } from 'ramda'
 import { saltHashPassword, genRandomString } from './hash'
 import { encrypt } from './crypt'
-import { getPositions, getInvite, createAccount, updateInvite, createInvite, getSymbolsState, getProfile, updateSettings } from './db'
+import {
+  getPosition, getPositions, getInvite, createAccount, updateInvite,
+  createInvite, getSymbolsState, getProfile, updateSettings
+} from './db'
+import { publish } from './cote'
 
 const checkAuth = (ctx: Router.IRouterContext) =>
   ctx.isAuthenticated() ? ctx.state.user.name : (ctx.status = 401)
@@ -31,6 +35,22 @@ export default (router: Router) => {
       data: { ...bodyPath(ctx), binance: cryptKeysPairs(ctx) }
     })
     ctx.body = { status: true }
+  })
+
+  router.post('/api/positions/forceSell', async ctx => {
+    const name = checkAuth(ctx)
+    if (!name) return (ctx.body = { status: false, error: 'Denied' })
+    
+    const position = await getPosition(ctx.request.body.id)
+    if (position.account === name) {
+      publish('newSignal', {
+        symbol: prop('symbol', position),
+        side: 'SELL',
+        forced: true
+      })
+      return ctx.body = { status: true }
+    }
+    return ctx.body = { status: false }
   })
 
   router.get('/api/profile', async ctx => {
