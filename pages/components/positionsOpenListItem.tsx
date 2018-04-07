@@ -70,9 +70,12 @@ export default class extends Component<Props> {
   }
 
   onForceSell = async () => {
+    const confirmation = confirm(`Are you sure you want to sell ${this.props.position.symbol}?`)
+    if (confirmation) {
     const resp = await post(`/api/positions/forceSell`, { id: this.props.position.id })
     if (propEq('status', true, resp)) this.setState({ closed: true })
     else alert('Something went wrong')
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
