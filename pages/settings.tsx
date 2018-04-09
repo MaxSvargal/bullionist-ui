@@ -7,9 +7,11 @@ import requireAuth from './utils/requireAuth'
 
 import InputText from './components/inputText'
 import RangeInput from './components/rangeInput'
+import PercInput from './components/percInput'
 import Menu from './components/menu'
 import ToggleBtn from './components/toggleBtn'
 import MainButton from './components/mainBtn'
+import FlashMessage from './components/flashMessage'
 
 const Row = glamorous.div({
   display: 'flex',
@@ -41,12 +43,17 @@ interface Props {
   profile: {
     enabled: boolean,
     preferences: {
-      chunksNumber: number
+      chunksNumber: number,
+      minProfit: number
     }
   }
 }
 
 export default class extends Component<Props> {
+  state = {
+    saveStatus: null,
+    showMessage: false
+  }
 
   static async getInitialProps ({ req, res }: any) {
     await requireAuth(res, '/signin')
@@ -56,6 +63,10 @@ export default class extends Component<Props> {
 
   onSubmit = (data: {}) =>
     put('/api/settings', data)
+      .then(res => {
+        this.setState({ showMessage: true, saveStatus: res.status })
+        setTimeout(() => this.setState({ showMessage: false }), 1000)
+      })
 
   render () {
     const { profile } = this.props
@@ -102,10 +113,21 @@ export default class extends Component<Props> {
                 fieldName='preferences.chunksNumber'
                 label='Chunks number'
                 value={ profile.preferences.chunksNumber } />
+              <Field
+                type={ PercInput }
+                fieldName='preferences.minProfit'
+                label='Minimal profit threshold'
+                value={ profile.preferences.minProfit } />
 
               <Row>
                 <MainButton type='submit'>Save</MainButton>
               </Row>
+              
+              { this.state.showMessage &&
+                <FlashMessage
+                  type={ this.state.saveStatus ? 'success' : 'error' }
+                  message={ this.state.saveStatus ? 'Preferences saved' : 'Something went wrong' } />
+              }
             </Div>
           </Form>
         </Main>
