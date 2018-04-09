@@ -117,7 +117,7 @@ export default class extends Component<Props> {
                 type={ PercInput }
                 fieldName='preferences.minProfit'
                 label='Minimal profit threshold'
-                value={ profile.preferences.minProfit } />
+                value={ profile.preferences.minProfit || 0.006 } />
 
               <Row>
                 <MainButton type='submit'>Save</MainButton>
