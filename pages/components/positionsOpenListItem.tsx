@@ -53,6 +53,11 @@ const ClosedState = glamorous.div({
   justifyContent: 'center'
 })
 
+const SymbolPerc = glamorous.div({
+  fontSize: '1.2rem',
+  marginLeft: '1rem'
+})
+
 type Props = { position: { id: string, symbol: string, open: { price: number, time: number } } }
 export default class extends Component<Props> {
   state = {
@@ -102,6 +107,7 @@ export default class extends Component<Props> {
     const openPrice = path([ 'open', 'price' ], position)
     const candles = map(o(parseFloat, nth(4)), this.state.candles)
     const chadlesChartData = candles.map((v, i) => [ i, v, getPriceWProfit(openPrice) ])
+    const changePerc = ticker / openPrice * 100 - 100
 
     return this.state.closed ? <ClosedState>{ prop('symbol', position) } sold</ ClosedState> : (
       <Container positive={ ticker > openPrice } >
@@ -115,6 +121,7 @@ export default class extends Component<Props> {
         <Div gridArea='1 / 1 / 1 / 1' zIndex='999'>
           <HeadTitle positive={ ticker > openPrice }>
             { prop('symbol', position) }
+            { changePerc ? <SymbolPerc>{ changePerc.toFixed(2) }%</SymbolPerc> : <div/> }
             <ButtonForceSell onClick={ this.onForceSell }>Force sell</ButtonForceSell>
           </HeadTitle>
         </Div>
