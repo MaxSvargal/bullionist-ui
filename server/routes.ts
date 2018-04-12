@@ -45,6 +45,7 @@ export default (router: Router) => {
     if (position.account === name) {
       publish('newSignal', {
         symbol: prop('symbol', position),
+        account: name,
         side: 'SELL',
         forced: true
       })
