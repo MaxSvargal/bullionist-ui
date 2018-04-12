@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import glamorous, { Div } from 'glamorous'
 import moment from 'moment'
-import { filter, propEq, o, sortBy, path, reverse } from 'ramda'
+import { filter, prop, propEq, o, sortBy, path, reverse, converge, add, lt } from 'ramda'
+import { toFixed } from '../shared/helpers'
 
+const toFixed8 = toFixed(8)
+const comissionsSumm = converge(add, [ path([ 'open', 'comission' ]), path([ 'close', 'comission' ]) ])
 const filterClosed = o(o(reverse, sortBy(path([ 'close', 'time' ]))), filter(propEq('closed', true)))
 
 type Props = { positions: {}[] }
@@ -66,22 +69,28 @@ export default class extends Component<Props> {
     return (
       <Div display='flex' flexFlow='column nowrap'>
         { closed.map(v => (
-          <Item key={v.id} isPositive={v.profitPerc > 0}>
-            <Symbol>{ v.symbol }</Symbol>
+          <Item key={ prop('id', v) } isPositive={ o(lt(0), prop('profitPerc'), v) }>
+            <Symbol>{ prop('symbol', v) }</Symbol>
             <Profit>
               <Label>Profit</Label>
-              <Div>{ v.profitPerc.toFixed(8) } %</Div>
-              <Div>{ v.profitAmount.toFixed(8) } BTC</Div>
+              <Div>{ o(toFixed8, prop('profitPerc'), v) } %</Div>
+              <Div>{ o(toFixed8, prop('profitAmount'), v) } BTC</Div>
             </Profit>
             <Prices>
               <Label>Open / Close</Label>
-              <Div><Bigger>{ v.open.price.toFixed(8) }</Bigger> { moment(path([ 'open', 'time' ], v)).format('HH:mm, D MMM') }</Div>
-              <Div><Bigger>{ v.close.price.toFixed(8) }</Bigger> { moment(path([ 'close', 'time' ], v)).format('HH:mm, D MMM') }</Div>
+              <Div>
+                <Bigger>{ o(toFixed8, path([ 'open', 'price' ]), v) }</Bigger>
+                { moment(path([ 'open', 'time' ], v)).format('HH:mm, D MMM') }
+              </Div>
+              <Div>
+                <Bigger>{ o(toFixed8, path([ 'close', 'price' ]), v) }</Bigger>
+                { moment(path([ 'close', 'time' ], v)).format('HH:mm, D MMM') }
+              </Div>
             </Prices>
             <HideWhenSmall>
               <Label>Amount / Comission</Label>
-              <Div>{ v.open.origQty } { v.symbol }</Div>
-              <Div>{ (v.open.commission + v.close.commission).toFixed(8) } { v.close.commissionAsset }</Div>
+              <Div>{ path([ 'open', 'origQty' ], v) } { prop('symbol', v) }</Div>
+              <Div>{ o(toFixed8, comissionsSumm, v) } { path([ 'close', 'commissionAsset' ], v) }</Div>
             </HideWhenSmall>
           </Item>
         )) }

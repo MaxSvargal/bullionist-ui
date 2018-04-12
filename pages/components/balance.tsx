@@ -11,8 +11,8 @@ import PeriodSelector from './periodSelector'
 
 const getOpenedLength = o(length, filter(propEq('closed', false)))
 const timeInPeriod = period => time => time && !moment().isAfter(moment(time).add(period))
-const openTimeInPeriod = converge(pathSatisfies, [ timeInPeriod, always([ 'close', 'time' ]) ])
-const filterCandlesByPeriod = period => filter(both(propEq('closed', true), openTimeInPeriod(period)))
+const openTimeInPeriod = converge(pathSatisfies, [ timeInPeriod, always([ 'open', 'time' ]) ])
+const filterCandlesByPeriod = period => filter(openTimeInPeriod(period))
 
 const Container = glamorous.div({
   width: '100vw',
