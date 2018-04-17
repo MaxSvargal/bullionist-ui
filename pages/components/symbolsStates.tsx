@@ -41,7 +41,7 @@ const SymbolBlock = glamorous.a(({ type }) => ({
 const ListContainer = glamorous.div({
   display: 'flex',
   flexFlow: 'row wrap',
-  maxHeight: '70vh',
+  maxHeight: 'calc(100vh - 26rem)',
   overflowY: 'auto'
 })
 
