@@ -59,3 +59,12 @@ export const updateSettings = ({ account, data }: { account: string, data: {} })
   r.table('accounts')
     .get(account)
     .update(data))
+
+export const getPaymentsOf = (account: string) => dbUp(
+  r.table('payments')
+    .filter({ account })
+    .orderBy(r.row('time')))
+
+export const createNewPayment = (data: {}) => dbUp(
+  r.table('payments')
+    .insert(data))

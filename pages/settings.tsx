@@ -94,17 +94,19 @@ export default class extends Component<Props> {
                   This keys will be encrypted by AES-256
                 </small>
               </Row>
-              <Field
-                type={ InputText }
-                fieldName='binance.key'
-                label='Key'
-                placeholder='****************************************************************' />
-              <Field
-                type={ InputText }
-                fieldName='binance.secret'
-                label='Secret'
-                placeholder='****************************************************************' />
-
+              <Row>
+                <Field
+                  type={ InputText }
+                  fieldName='binance.key'
+                  label='Key'
+                  placeholder='****************************************************************' />
+                <Field
+                  type={ InputText }
+                  fieldName='binance.secret'
+                  label='Secret'
+                  placeholder='****************************************************************' />
+              </Row>
+              
               <Row>
                 <Header>Trading preferences</Header>
               </Row>

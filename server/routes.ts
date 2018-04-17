@@ -1,13 +1,16 @@
 import Router from 'koa-router'
 import * as fetch from 'isomorphic-fetch'
-import { converge, merge, objOf, both, ifElse, isEmpty, always, head, prop, o, all, not, isNil, props, path } from 'ramda'
+import { converge, merge, objOf, both, ifElse, isEmpty, always, head, prop, o, path, propEq, pair, find } from 'ramda'
 import { saltHashPassword, genRandomString } from './hash'
-import { encrypt } from './crypt'
+import { encrypt, decrypt } from './crypt'
 import {
-  getPosition, getPositions, getInvite, createAccount, updateInvite,
-  createInvite, getSymbolsState, getProfile, updateSettings
+  getPosition, getPositions, getInvite, createAccount, updateInvite, createNewPayment,
+  createInvite, getSymbolsState, getProfile, updateSettings, getAccount, getPaymentsOf
 } from './db'
+import client from './exchange'
 import { publish } from './cote'
+
+const billingAccount = 'maxsvargal'
 
 const checkAuth = (ctx: Router.IRouterContext) =>
   ctx.isAuthenticated() ? ctx.state.user.name : (ctx.status = 401)
@@ -23,6 +26,16 @@ const cryptKeysPairs = ifElse(
     o(objOf('secret'), o(encrypt, binanceSecretPath))
   ]),
   always({})
+)
+
+const decryptKeysPair = converge(pair, [
+  o(decrypt, path([ 'binance', 'key' ])),
+  o(decrypt, path([ 'binance', 'secret' ]))
+])
+const depositListCond = ifElse(
+  propEq('success', true),
+  prop('depositList'),
+  always({ status: false, error: 'Exchange returned failed response' })
 )
 
 export default (router: Router) => {
@@ -74,6 +87,41 @@ export default (router: Router) => {
     const { symbol, interval, limit } = ctx.params
     const res = await fetch(`https://api.binance.com/api/v1/klines?interval=${interval}&limit=${limit}&symbol=${symbol}`)
     ctx.body = await res.json()
+  })
+
+  router.get('/api/paids', async ctx => {
+    const account = checkAuth(ctx)
+    if (!account) return (ctx.body = { status: false, error: 'Denied' })
+    ctx.body = await getPaymentsOf(account)
+  })
+
+  router.post('/api/checkPaid', async ctx => {
+    const account = checkAuth(ctx)
+    if (!account) return (ctx.body = { status: false, error: 'Denied' })
+
+    const { outputAddr } = ctx.request.body
+
+    const billAccount = await getAccount(billingAccount)
+    const keysPair = decryptKeysPair(billAccount)
+    const depositHistory = await client(keysPair).depositHistory()
+    
+    const payment = o(find(propEq('address', outputAddr)), prop('depositList'), depositHistory)
+    
+    if (!payment) {
+      ctx.body = { status: false, error: 'Payment not found. Try later.' }
+    } else {
+      const payments = await getPaymentsOf(account)
+      const double = find(propEq('txId', prop('txId', payment)), payments)
+
+      if (double) return ctx.body = { status: false, error: 'Was already taken' }
+      if (payment.status === 0) return ctx.body = { status: false, error: 'Your payments is pending' }
+      if (payment.asset !== 'BTC') return ctx.body = { status: false, error: 'This payment is not in BTC' }
+      if (payment.status === 1) {
+        const state = await createNewPayment({ ...payment, account })
+        if (state.inserted !== 1) return ctx.body = { status: false, error: 'Something went wrong!' }
+        else ctx.body = { status: true }
+      }
+    }
   })
 
   router.post('/signup', async ctx => {

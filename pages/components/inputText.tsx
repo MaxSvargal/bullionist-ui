@@ -4,8 +4,7 @@ import glamorous from 'glamorous'
 const Row = glamorous.div({
   display: 'flex',
   flexFlow: 'column wrap',
-  lineHeight: '1.6rem',
-  padding: '1rem'
+  lineHeight: '1.6rem'
 })
 
 const Label = glamorous.label({
@@ -13,7 +12,9 @@ const Label = glamorous.label({
 })
 
 const Input = glamorous.input({
-  padding: '.8rem',
+  width: '100%',
+  boxSizing: 'border-box',
+  padding: '.5rem',
   fontSize: '1.1rem',
   '::placeholder': {
     color: '#cfd8dc'
