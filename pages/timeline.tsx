@@ -4,6 +4,7 @@ import { get } from './services/fetch'
 
 import PositionsTimeline from './components/positionsTimeline'
 import Menu from './components/menu'
+import NothingToShow from './components/nothingToShow'
 
 export default class extends Component {
   state = { loaded: false }
@@ -53,7 +54,10 @@ export default class extends Component {
           <Menu />
         </MenuContainer>
         <Main>
-          <PositionsTimeline positions={ positions } />
+          { positions.length === 0 ?
+            <NothingToShow /> :
+            <PositionsTimeline positions={ positions } />
+          }
         </Main>
       </Container>
     )

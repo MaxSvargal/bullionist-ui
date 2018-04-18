@@ -5,6 +5,7 @@ import requireAuth from './utils/requireAuth'
 
 import PositionsClosedList from './components/positionsClosedList'
 import Menu from './components/menu'
+import NothingToShow from './components/nothingToShow'
 
 export default class extends Component {
 
@@ -23,7 +24,10 @@ export default class extends Component {
           <Menu />
         </MenuContainer>
         <Main>
-          <PositionsClosedList positions={ positions } />
+          { positions.length === 0 ?
+            <NothingToShow /> :
+            <PositionsClosedList positions={ positions } />
+          }
         </Main>
       </Container>
     )

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
+
 import { get } from './services/fetch'
 import requireAuth from './utils/requireAuth'
 
@@ -7,6 +8,7 @@ import Balance from './components/balance'
 import Menu from './components/menu'
 import PositionsOpenList from './components/positionsOpenList'
 import SymbolsStates from './components/symbolsStates'
+import NothingToShow from './components/nothingToShow'
 
 export default class extends Component {
   state = { loaded: false }
@@ -75,12 +77,16 @@ export default class extends Component {
         <Sidebar>
           <SymbolsStates data={ symbolsState } />
         </Sidebar>
-        <Header>
-          <Balance positions={ positions } profile={ profile } />
-        </Header>
-        <Main>
-          <PositionsOpenList positions={ positions } />
-        </Main>
+        { positions.length === 0 ? <NothingToShow /> :
+          <div>
+            <Header>
+              <Balance positions={ positions } profile={ profile } />
+            </Header>
+            <Main>
+              <PositionsOpenList positions={ positions } />
+            </Main>
+          </div>
+        } 
       </Container>
     )
   }
