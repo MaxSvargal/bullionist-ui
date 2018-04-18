@@ -25,8 +25,8 @@ export default class extends Component<Props> {
           <Span padding='0.25rem 0'>Send <Strong color='#ffb300'>bitcoins</Strong> to address</Span>
           <Span background='#eceff1' padding='0.5rem 1rem' fontSize='1.1rem'>{ payAddress }</Span>
 
-          <Span>Fill your wallet address</Span>
-          <Field type={ InputText } fieldName='outputAddr' />
+          <Span>Fill bitcoin transaction id</Span>
+          <Field type={ InputText } fieldName='txId' />
 
           <Span>And then press the button</Span>
           <MainBtn style={ { padding: '0.5rem', width: '100%' } }>Check payment</MainBtn>

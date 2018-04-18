@@ -99,13 +99,13 @@ export default (router: Router) => {
     const account = checkAuth(ctx)
     if (!account) return (ctx.body = { status: false, error: 'Denied' })
 
-    const { outputAddr } = ctx.request.body
+    const { txId } = ctx.request.body
 
     const billAccount = await getAccount(billingAccount)
     const keysPair = decryptKeysPair(billAccount)
     const depositHistory = await client(keysPair).depositHistory()
     
-    const payment = o(find(propEq('address', outputAddr)), prop('depositList'), depositHistory)
+    const payment = o(find(propEq('txId', txId)), prop('depositList'), depositHistory)
     
     if (!payment) {
       ctx.body = { status: false, error: 'Payment not found. Try later.' }

@@ -24,7 +24,7 @@ export default class extends Component<Props> {
         <Row>
           <div>Date</div>
           <div>Amount</div>
-          <div>From</div>
+          <div>Tx ID</div>
         </Row>
         { rows.map(r =>
           <Row key={ prop('id', r) }>
@@ -32,7 +32,7 @@ export default class extends Component<Props> {
             <Div>{ prop('amount', r) } BTC</Div>
             <Div>
               <a href={ `https://blockchain.info/tx/${prop('txId', r)}` } target='_blank'>
-                { prop('address', r) }
+                <small>{ prop('txId', r) }</small>
               </a>
             </Div>
           </Row>
