@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { Chart } from 'react-google-charts'
 import {
   invoker, reduce, min, max, nth, head, juxt, groupBy, mapAccum, last, o, map, compose, always,
-  zip, converge, constructN, unnest, keys, values, pair, tail, path, prop, sortBy, filter
+  zip, converge, constructN, unnest, keys, values, tail, path, prop, sortBy, filter
 } from 'ramda'
 
 export default class extends Component {
   getCandlesOfProfit() {
+    const getUTCMonth = invoker(0, 'getUTCMonth')
     const getUTCHours = invoker(0, 'getUTCHours')
     const getUTCDate = invoker(0, 'getUTCDate')
     const minimum = o(reduce(min, Infinity), map(nth(1)))
@@ -22,7 +23,7 @@ export default class extends Component {
           juxt([ minimum, open(a[2] || o(last, head)(b)), close, maximum ])(b), a
         ], []), values)
       ]),
-      groupBy(o(converge(pair, [ getUTCDate, getUTCHours ]), head))
+      groupBy(o(juxt([ getUTCMonth, getUTCDate, getUTCHours ]), head))
     )
   }
 
@@ -60,7 +61,7 @@ export default class extends Component {
             risingColor: { strokeWidth: 0, fill: '#4db6ac' },
           },
           hAxis: {
-            title: 'Day, Hour',
+            title: 'Month, Day, Hour',
             titleTextStyle: {
               color: '#b0bec5'
             },
