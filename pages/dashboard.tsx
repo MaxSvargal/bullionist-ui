@@ -9,6 +9,7 @@ import Menu from './components/menu'
 import PositionsOpenList from './components/positionsOpenList'
 import SymbolsStates from './components/symbolsStates'
 import NothingToShow from './components/nothingToShow'
+import LoadingPlaceholder from './components/loadingPlaceholder'
 
 export default class extends Component {
   state = { loaded: false }
@@ -69,7 +70,16 @@ export default class extends Component {
       }
     })
 
-    return !this.state.loaded ? <div/> : (
+    return !this.state.loaded || positions.length === 0 ?
+      <Container>
+        <MenuContainer>
+          <Menu />
+        </MenuContainer>
+        <Main style={{ marginTop: '-30vh' }}>
+          <LoadingPlaceholder />
+        </Main>
+      </Container>
+    :
       <Container>
         <MenuContainer>
           <Menu />
@@ -77,17 +87,12 @@ export default class extends Component {
         <Sidebar>
           <SymbolsStates data={ symbolsState } />
         </Sidebar>
-        { positions.length === 0 ? <NothingToShow /> :
-          <div>
-            <Header>
-              <Balance positions={ positions } profile={ profile } />
-            </Header>
-            <Main>
-              <PositionsOpenList positions={ positions } />
-            </Main>
-          </div>
-        } 
+        <Header>
+          <Balance positions={ positions } profile={ profile } />
+        </Header>
+        <Main>
+          <PositionsOpenList positions={ positions } />
+        </Main>
       </Container>
-    )
   }
 }

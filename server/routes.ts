@@ -4,7 +4,7 @@ import { converge, merge, objOf, both, ifElse, isEmpty, always, head, prop, o, p
 import { saltHashPassword, genRandomString } from './hash'
 import { encrypt, decrypt } from './crypt'
 import {
-  getPosition, getPositions, getInvite, createAccount, updateInvite, createNewPayment,
+  getPosition, getPositions, getInvite, createAccount, updateInvite, createNewPayment, getInvitesOf,
   createInvite, getSymbolsState, getProfile, updateSettings, getAccount, getPaymentsOf
 } from './db'
 import client from './exchange'
@@ -93,6 +93,12 @@ export default (router: Router) => {
     const account = checkAuth(ctx)
     if (!account) return (ctx.body = { status: false, error: 'Denied' })
     ctx.body = await getPaymentsOf(account)
+  })
+
+  router.get('/api/invites', async ctx => {
+    const account = checkAuth(ctx)
+    if (!account) return (ctx.body = { status: false, error: 'Denied' })
+    ctx.body = await getInvitesOf(account)
   })
 
   router.post('/api/checkPaid', async ctx => {

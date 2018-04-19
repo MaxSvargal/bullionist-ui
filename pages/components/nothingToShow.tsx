@@ -1,6 +1,6 @@
 import { Div } from 'glamorous'
 import Icon from 'react-icons-kit'
-import { ic_schedule as schedule } from 'react-icons-kit/md/ic_schedule'
+import { lowVision } from 'react-icons-kit/fa/lowVision'
 
 export default () => (
   <Div
@@ -10,9 +10,9 @@ export default () => (
     justifyContent='center'
     textAlign='center'
     height='100vh'
-    color='#0d47a1'>
+    color='#1976d2'>
     <div>
-      <Icon icon={ schedule } size={ 256 } style={{ fill: '#8e24aa' }} />
+      <Icon icon={ lowVision } size={ 256 } />
       <h1>Nothing to show yet</h1>
     </div>
   </Div>

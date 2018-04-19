@@ -7,6 +7,7 @@ import { ic_notifications as notify } from 'react-icons-kit/md/ic_notifications'
 import { ic_timeline as timeline } from 'react-icons-kit/md/ic_timeline'
 import { ic_settings as settings } from 'react-icons-kit/md/ic_settings'
 import { ic_account_balance_wallet as wallet } from 'react-icons-kit/md/ic_account_balance_wallet'
+import { ic_group_add as group } from 'react-icons-kit/md/ic_group_add'
 
 export default class extends Component {
   render() {
@@ -59,8 +60,9 @@ export default class extends Component {
         <Link href='/dashboard'><MenuItem><Icon icon={notify} size={32} /><small>Dashboard</small></MenuItem></Link>
         <Link href='/history'><MenuItem><Icon icon={history} size={32} /><small>History</small></MenuItem></Link>
         <Link href='/timeline'><MenuItem><Icon icon={timeline} size={32} /><small>Timeline</small></MenuItem></Link>
-        <Link href='/billing'><MenuItem><Icon icon={wallet} size={32} /><small>Billing</small></MenuItem></Link>
         <Link href='/settings'><MenuItem><Icon icon={settings} size={32} /><small>Settings</small></MenuItem></Link>
+        <Link href='/billing'><MenuItem><Icon icon={wallet} size={32} /><small>Billing</small></MenuItem></Link>
+        <Link href='/invites'><MenuItem><Icon icon={group} size={32} /><small>Invites</small></MenuItem></Link>
       </Menu>
     )
   }

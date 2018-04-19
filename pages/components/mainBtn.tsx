@@ -10,6 +10,19 @@ export default glamorous.button({
   borderRadius: '.25rem',
   width: '30vw',
   alignSelf: 'flex-end',
+  cursor: 'pointer',
+  ':focus': {
+    background: '#fbc02d',
+    outline: 'none',
+    fontSize: 0
+  },
+  '> span': {
+    display: 'none'
+  },
+  ':focus > span': {
+    display: 'inline',
+    fontSize: '1.2rem'
+  },
   '@media (max-width: 600px)': {
     width: '100%'
   }

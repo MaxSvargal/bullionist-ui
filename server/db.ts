@@ -65,6 +65,11 @@ export const getPaymentsOf = (account: string) => dbUp(
     .filter({ account })
     .orderBy(r.row('time')))
 
+export const getInvitesOf = (account: string) => dbUp(
+  r.table('invites')
+    .filter({ by: account })
+    .orderBy(r.row('active')))
+
 export const createNewPayment = (data: {}) => dbUp(
   r.table('payments')
     .insert(data))

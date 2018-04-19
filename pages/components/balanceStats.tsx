@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Div, Small, Strong } from 'glamorous'
 import { apply, filter, propEq, prop, map, compose, sum, o, length, reject, isNil, path, converge, multiply, divide, invoker } from 'ramda';
+import Icon from 'react-icons-kit'
+import { bitcoin } from 'react-icons-kit/fa/bitcoin'
+
 import { toFixed } from '../shared/helpers'
 
 const filterClosed = filter(propEq('closed', true))
@@ -29,13 +32,18 @@ export default class extends Component {
     return (
       <Div height='100%' display='flex' flexFlow='column wrap' alignItems='center' justifyContent='center' paddingTop='1rem' boxSizing='border-box'>
         <Div color='#ec407a' display='flex' flexFlow='row nowrap' alignItems='center' lineHeight='4rem'>
-          <Small fontSize='.9rem' marginRight='.5rem'>+ balance</Small>
-          <Strong fontSize='calc(0.025 * 100vw + 1rem)'> { balance.toFixed(8) }<Strong fontSize='1.1em' color='#880e4f'>฿</Strong></Strong>
+          <Small fontSize='.9rem' marginRight='.5rem'>+ balance </Small>
+          <Strong fontSize='calc(0.025 * 100vw + 1rem)'>
+            { balance.toFixed(8) }
+            <Strong color='#880e4f' marginTop='.075em' position='absolute'>
+              <Icon icon={ bitcoin } size='1em' />
+            </Strong>
+          </Strong>
         </Div>
         <Div fontSize='calc(12px + (20 - 12) * ((100vw - 300px) / (1600 - 300)))' color='#455a64' marginTop='1rem' lineHeight='3rem' textAlign='center'>
-          <div>{ toFixed4(profitOfVolume) }% <small>of trade volume</small> { toFixed8(amountOfVolume) }<strong>฿</strong></div>
-          <div>{ toFixed4(profitOfCapital) }% <small>of balance capital</small> { toFixed8(amountOfCapital) }<strong>฿</strong></div>
-          <div>{ openedNowLen } / { chunksNumber } <small>chunks of amount </small> { toFixed8(chunkAmount) }<strong>฿</strong></div>
+          <div>{ toFixed4(profitOfVolume) }% <small>of trade volume</small> { toFixed8(amountOfVolume) }<Icon icon={ bitcoin } /></div>
+          <div>{ toFixed4(profitOfCapital) }% <small>of balance capital</small> { toFixed8(amountOfCapital) }<Icon icon={ bitcoin } /></div>
+          <div>{ openedNowLen } / { chunksNumber } <small>chunks of amount </small> { toFixed8(chunkAmount) }<Icon icon={ bitcoin } /></div>
         </Div>
       </Div>
     )
