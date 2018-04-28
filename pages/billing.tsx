@@ -58,6 +58,11 @@ export default class extends Component<Props> {
         </MenuContainer>
         <Main>
           <Div padding='1rem'>
+            <Div background='#fce4ec' padding='.5rem 1rem' color='#880e4f' fontSize='1.2rem' lineHeight='2.34rem' marginBottom='1rem'>
+              <div>This is not an interface for sending funds to Binance exchange!</div>
+              <div>This section is to pay fees for bullionist service.</div>
+              <div>Send money through only when you have a negative balance.</div>
+            </Div>
             <Div display='flex' flexFlow='row wrap' justifyContent='space-between'>
               <Div>
                 <H1 color='#ec407a'><small>On balance:</small> { toFixed8(onBalance) } BTC</H1>

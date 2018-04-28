@@ -142,7 +142,7 @@ export default (router: Router) => {
         salt,
         password: hash,
         invite: invite.id,
-        preferences: { chunksNumber: 1 },
+        preferences: { chunksNumber: 1, minProfit: 0.009 },
         binance: { key: null, secret: null },
         enabled: false
       })
