@@ -38,7 +38,7 @@ export default class extends Component {
         "sidebar footer footer"
       `,
       '@media(max-width: 600px)': {
-        grid: '300px auto 4rem / 1fr',
+        grid: '30vh auto 4rem / 1fr',
         gridTemplateAreas: `
           "header"
           "main"
@@ -49,7 +49,8 @@ export default class extends Component {
 
     const Header = glamorous.div({
       gridArea: 'header',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      position: 'relative'
     })
     const Main = glamorous.div({
       gridArea: 'main',

@@ -16,17 +16,40 @@ const filterCandlesByPeriod = period => filter(openTimeInPeriod(period))
 
 const Container = glamorous.div({
   width: '100vw',
+  height: '100%',
   overflowX: 'scroll',
   overflowY: 'hidden'
 })
 
 const Scroller = glamorous.div({
   display: 'flex',
-  flexFlow: 'row wrap',
+  flexFlow: 'row nowrap',
   justifyContent: 'space-between',
+  height: 'inherit',
   '@media(max-width: 600px)': {
-    flexFlow: 'row wrap',
     width: '200vw'
+  }
+})
+
+const StatsContainer = glamorous.div({
+  flex: '1.5 1',
+  minWidth: '360',
+  maxWidth: '50vw',
+  height: 'inherit',
+  '@media(max-width: 600px)': {
+    width: '100vw'
+  }
+})
+
+const GraphContainer = glamorous.div({
+  flex: '1 1',
+  minWidth: '300',
+  maxWidth: '50vw',
+  height: 'inherit',
+  '@media(max-width: 600px)': {
+    width: '100vw',
+    height: '200px',
+    position: 'relative'
   }
 })
 
@@ -46,19 +69,19 @@ export default class extends Component {
     return (
       <Container>
         <Scroller>
-          <Div flex='1.5 1' minWidth='360' maxWidth='50vw'>
+          <StatsContainer>
             <PeriodSelector onSelect={ this.onSelectPeriod } />
             <BalanceStats
               positions={ positions }
               chunksNumber={ path([ 'preferences', 'chunksNumber' ], profile) }
               openedNowLen={ openedNowLen } />
-          </Div>
-          <Div flex='1 1' minWidth='300' maxWidth='100%' maxWidth='50vw'>
+          </StatsContainer>
+          <GraphContainer>
             <Toggler>
               <ProfitWaterfall positions={ positions } />
               <ProfitLine positions={ positions } />
             </Toggler>
-          </Div>
+          </GraphContainer>
         </Scroller>
       </Container>
     )

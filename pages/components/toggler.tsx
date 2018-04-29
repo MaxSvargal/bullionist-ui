@@ -9,7 +9,7 @@ export default class extends Component {
   })
 
   render() {
-    return <Div>
+    return <Div height='inherit'>
       <Button
         onClick={ this.onSwitch }
         position='absolute'
@@ -20,7 +20,7 @@ export default class extends Component {
         color='#fff'>
         Change chart
       </Button>
-      <div>{ this.props.children[this.state.index] }</div>
+      <div style={ { height: 'inherit' } }>{ this.props.children[this.state.index] }</div>
     </Div>
   }
 }

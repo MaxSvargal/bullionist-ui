@@ -7,16 +7,20 @@ import { get, post } from '../services/fetch'
 import CandlesChart from './candlesChart'
 
 const Container = glamorous.div(({ positive }) => ({
+  maxWidth: '100vw',
   height: '8rem',
   display: 'grid',
   grid: '1fr / 1fr 12rem',
   alignItems: 'center',
   justifyItems: 'start',
-  overflow: 'hidden',
+  // overflow: 'hidden',
   color: positive ? '#4B6227' : '#804743',
   background: '#fafafa',
   borderTop: `1px solid ${positive ? '#D7EDB6' : '#fff'}`,
-  borderBottom: `1px solid ${positive ? '#D7EDB6' : '#fce4ec'}`
+  borderBottom: `1px solid ${positive ? '#D7EDB6' : '#fce4ec'}`,
+  '@media(max-width: 600px)': {
+    height: '7rem',
+  }
 }))
 
 const HeadTitle = glamorous.div(({ positive }) => ({
@@ -29,6 +33,12 @@ const HeadTitle = glamorous.div(({ positive }) => ({
   alignItems: 'center',
   ':hover > button': {
     opacity: 1
+  },
+  '@media(max-width: 600px)': {
+    fontSize: '2rem',
+    wordSpacing: '0',
+    margin: '0 .5rem 0 .5rem',
+    flexFlow: 'row wrap'
   }
 }))
 
@@ -39,7 +49,10 @@ const ButtonForceSell = glamorous.button({
   color: '#fff',
   margin: '0 1rem',
   opacity: 0,
-  transition: 'opacity .2s ease-in-out'
+  transition: 'opacity .2s ease-in-out',
+  '@media(max-width: 600px)': {
+    margin: 0
+  }
 })
 
 const ClosedState = glamorous.div({
@@ -50,12 +63,29 @@ const ClosedState = glamorous.div({
   fontSize: '1.34rem',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  '@media(max-width: 600px)': {
+    fontSize: '1rem',
+  }
 })
 
 const SymbolPerc = glamorous.div({
   fontSize: '1.2rem',
-  marginLeft: '1rem'
+  marginLeft: '1rem',
+  '@media(max-width: 600px)': {
+    fontSize: '.9rem',
+    margin: 0
+  }
+})
+
+const PricesContainer = glamorous.div({
+  display: 'flex',
+  margin: '0 1rem',
+  lineHeight: '1.8rem',
+  '@media(max-width: 600px)': {
+    fontSize: '.9rem',
+    lineHeight: '1.5rem'
+  }
 })
 
 type Props = { position: { id: string, symbol: string, open: { price: number, time: number } } }
@@ -126,20 +156,20 @@ export default class extends Component<Props> {
           </HeadTitle>
         </Div>
         <Div gridArea='1 / 2 / 1 / 2'>
-          <Div display='flex' margin='0 1rem' lineHeight='1.8rem' >
-            <Div fontSize='1.14rem' color={ticker > openPrice ? '#9e9d24' : '#d84315' }>
+          <PricesContainer>
+            <Div fontSize='1.14em' color={ticker > openPrice ? '#9e9d24' : '#d84315' }>
               <div>{ ticker || '~' }</div>
               <div>{ getPriceWProfit(openPrice).toFixed(8) }</div>
               <div>{ openPrice }</div>
               <Div fontSize='.75em'>{ moment(path([ 'open', 'time' ], position)).format('HH:mm, D MMM') }</Div>
             </Div>
-            <Div fontSize='.8rem' color={ticker > openPrice ? '#c0ca33' : '#ef6c00' } marginLeft='.5rem'>
+            <Div fontSize='.8em' color={ticker > openPrice ? '#c0ca33' : '#ef6c00' } marginLeft='.5rem'>
               <div>curent</div>
               <div>expect</div>
               <div>bought</div>
               <div>from</div>
             </Div>
-          </Div>
+          </PricesContainer>
         </Div>
       </Container>
     )
